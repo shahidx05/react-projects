@@ -1,11 +1,18 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './App.css'
 import { Trash } from 'lucide-react'
 
 const App = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [task, setTask] = useState([])
+  
+  const [task, setTask] = useState(
+    localStorage.getItem('notes') ? JSON.parse(localStorage.getItem('notes')) : []
+  )
+  
+  useEffect(() => {
+    localStorage.setItem('notes', JSON.stringify(task));
+  }, [task]);
 
   const submitHandler = (e) => {
     e.preventDefault();

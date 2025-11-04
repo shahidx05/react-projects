@@ -20,7 +20,7 @@ h1{
 h2 {
   text-align: center;
   font-size: 1.6rem;
-  margin: 30px 0 20px;
+  margin: 30px 0;
   color: #34495e;
 }
 
@@ -84,7 +84,7 @@ form button:hover {
   padding: 15px 18px;
   border-radius: 10px;
   box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-  width: 280px;
+  max-width: 280px;
   height: 220px;
   flex: 1 1 250px;
   overflow: hidden;
@@ -132,6 +132,7 @@ form button:hover {
   color: #777;
   font-size: 18px;
   font-style: italic;
+  margin: 0 auto;
 }
 
 @media (max-width: 768px) {
@@ -148,5 +149,3 @@ form button:hover {
     max-width: 320px;
   }
 }
-
-
