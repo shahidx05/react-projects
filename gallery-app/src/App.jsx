@@ -12,7 +12,7 @@ const App = () => {
 
   const getData = async () => {
     try {
-      const response = await axios.get(`https://picsum.photos/v2/list?page=${page}&limit=16`);
+      const response = await axios.get(`https://picsum.photos/v2/list?page=${page}&limit=12`);
       setData(response.data);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -23,14 +23,18 @@ const App = () => {
     <>
       <h1>Image Gallery</h1>
 
-      <div className="container">
-        {data.map((item, index) => (
-          <div key={index} className="card">
-            <img src={item.download_url} alt={item.author} />
-            <p>{item.author}</p>
-          </div>
-        ))}
-      </div>
+      {data.length === 0 ? (
+        <p className="loading">Loading...</p>
+      ) : (
+        <div className="container">
+          {data.map((item, index) => (
+            <div key={index} className="card">
+              <img src={item.download_url} alt={item.author} />
+              <p>{item.author}</p>
+            </div>
+          ))}
+        </div>
+      )}
 
       <div className="pagination">
         <button
@@ -42,7 +46,7 @@ const App = () => {
           }}
         >Prev</button>
 
-        <span className="page-number">{page}</span>
+        <span className="page-number">Page No. {page}</span>
 
         <button
           onClick={() => {
