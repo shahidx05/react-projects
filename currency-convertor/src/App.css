@@ -1,0 +1,279 @@
+/* Global reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+}
+
+:root {
+  --bg-gradient: radial-gradient(circle at top left, #1f2933, #020617);
+  --card-bg: rgba(15, 23, 42, 0.9);
+  --accent: #38bdf8;
+  --accent-soft: rgba(56, 189, 248, 0.15);
+  --border-subtle: rgba(148, 163, 184, 0.25);
+  --text-main: #e5e7eb;
+  --text-muted: #94a3b8;
+  --text-strong: #f9fafb;
+  --danger: #f97373;
+  --radius-lg: 18px;
+  --radius-full: 999px;
+  --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.9);
+}
+
+/* App container */
+.cc-app {
+  min-height: 100vh;
+  background: var(--bg-gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+/* Card */
+.cc-card {
+  width: 100%;
+  max-width: 460px;
+  background: var(--card-bg);
+  border-radius: 24px;
+  padding: 24px 22px 18px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  box-shadow: var(--shadow-soft);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+}
+
+/* Header */
+.cc-header {
+  margin-bottom: 18px;
+}
+
+.cc-header h1 {
+  font-size: 1.5rem;
+  color: var(--text-strong);
+  letter-spacing: 0.03em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cc-header h1::before {
+  content: "💱";
+  font-size: 1.3rem;
+}
+
+.cc-header p {
+  margin-top: 6px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+/* Sections */
+.cc-section {
+  margin-bottom: 16px;
+}
+
+.cc-label {
+  display: block;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+/* Inputs */
+.cc-input {
+  width: 100%;
+  padding: 10px 11px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+  background: rgba(15, 23, 42, 0.9);
+  color: var(--text-main);
+  font-size: 0.95rem;
+  outline: none;
+  transition: border 0.15s ease, box-shadow 0.15s ease,
+    background 0.15s ease, transform 0.08s ease;
+}
+
+.cc-input::placeholder {
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.cc-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent-soft);
+  transform: translateY(-1px);
+}
+
+/* Row */
+.cc-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+/* Field group */
+.cc-field {
+  flex: 1;
+}
+
+/* Select wrapper */
+.cc-select-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+  background: rgba(15, 23, 42, 0.9);
+  transition: border 0.15s ease, box-shadow 0.15s ease,
+    transform 0.08s ease;
+}
+
+.cc-select-wrapper:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent-soft);
+  transform: translateY(-1px);
+}
+
+/* Flag */
+.cc-flag {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+/* Select */
+.cc-select {
+  border: none;
+  background: transparent;
+  color: var(--text-main);
+  font-size: 0.9rem;
+  width: 100%;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+}
+
+/* Swap button */
+.cc-swap-btn {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default; /* no logic yet */
+  outline: none;
+}
+
+/* Convert button */
+.cc-convert-btn {
+  width: 100%;
+  padding: 10px 0;
+  border-radius: var(--radius-full);
+  border: none;
+  background: linear-gradient(135deg, #0ea5e9, #22c55e);
+  color: #0b1120;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: default; /* no logic */
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  box-shadow: 0 12px 30px rgba(34, 197, 94, 0.35);
+  transition: transform 0.08s ease, box-shadow 0.1s ease,
+    filter 0.08s ease;
+}
+
+.cc-convert-btn:active {
+  transform: translateY(0); /* disabled feeling, optional */
+}
+
+/* Result box */
+.cc-result {
+  border-radius: 18px;
+  padding: 12px 12px 10px;
+  background: radial-gradient(circle at top left, #0b1220, #020617);
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cc-result-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cc-result-label {
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.cc-result-rate {
+  font-size: 0.75rem;
+  color: var(--accent);
+  background: rgba(56, 189, 248, 0.12);
+  padding: 4px 8px;
+  border-radius: 999px;
+}
+
+.cc-result-value {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--text-strong);
+  margin-top: 2px;
+}
+
+/* Footer */
+.cc-footer {
+  margin-top: 6px;
+  padding-top: 8px;
+  border-top: 1px dashed rgba(148, 163, 184, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cc-footer p {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.cc-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--danger);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .cc-card {
+    padding: 18px 14px 14px;
+  }
+
+  .cc-header h1 {
+    font-size: 1.25rem;
+  }
+
+  .cc-row {
+    gap: 8px;
+  }
+
+  .cc-result-value {
+    font-size: 1.2rem;
+  }
+}
