@@ -1,94 +1,146 @@
-import React from "react";
-import "./App.css";
+import { useState, useEffect } from 'react'
+import axios from 'axios';
 
-const App = () => {
+export const App = () => {
+  const [x, setx] = useState("")
+  const [y, sety] = useState("")
+  const [from, setfrom] = useState("USD")
+  const [to, setto] = useState("INR")
+  const [data, setdata] = useState({})
+
+  const getData = async () => {
+    try {
+      const res = await axios.get(
+        `https://v6.exchangerate-api.com/v6/82d624a523831ec74b8c9256/latest/${from}`
+      );
+      setdata(res.data);
+    } catch (err) {
+      console.error("Error fetching currency data:", err);
+    }
+  };
+
+  const swap = ()=>{
+    setfrom(to);
+    setto(from);
+  }
+
+const calc = (e) => {
+  e.preventDefault();
+  
+  const rate = data?.conversion_rates?.[to];
+
+  if (!rate || !x) {
+    sety("");   // empty instead of NaN
+    return;
+  }
+
+  const result = Number(x) * rate;
+  sety(result.toFixed(2)); // rounded + valid string
+};
+
+
+
+  const currencyKeys = data?.conversion_rates ? Object.keys(data.conversion_rates) : [];
+
+
+  useEffect(() => {
+    getData();
+  }, [from]);
+
+
   return (
-    <div className="cc-app">
-      <div className="cc-card">
-        {/* Header */}
-        <header className="cc-header">
-          <h1>Currency Converter</h1>
-          <p>Convert money between different currencies instantly.</p>
-        </header>
+    <div
+      className="w-full h-screen flex flex-wrap justify-center items-center bg-cover bg-no-repeat"
+      style={{
+        // backgroundImage: `url('${}')`,
+        backgroundColor: "#222"
+      }}
+    >
+      <div className="w-full">
+        <div className="w-full max-w-md mx-auto border border-gray-60 rounded-lg p-5 backdrop-blur-sm bg-white/30">
+          <form
+          onSubmit={calc}>
+            <div className="w-full mb-1">
+              <div className={`bg-white p-3 rounded-lg text-sm flex `}>
+                <div className="w-1/2">
+                  <label className="text-black/40 mb-2 inline-block">
+                    From
+                  </label>
+                  <input
 
-        {/* Amount */}
-        <section className="cc-section">
-          <label className="cc-label" htmlFor="amount">
-            Amount
-          </label>
-          <input
-            id="amount"
-            type="number"
-            className="cc-input"
-            placeholder="Enter amount"
-          />
-        </section>
+                    className="outline-none w-full bg-transparent py-1.5"
+                    type="number"
+                    placeholder="Amount"
+                    value={x}
+                    onChange={(e) => setx(e.target.value)}
+                  />
+                </div>
+                <div className="w-1/2 flex flex-wrap justify-end text-right">
+                  <p className="text-black/40 mb-2 w-full">Currency Type</p>
+                  <select
+                    className="rounded-lg px-1 py-1 bg-gray-100 cursor-pointer outline-none"
+                    onChange={(e) => setfrom(e.target.value)} value={from}
+                  >
+                    {currencyKeys.map((code) => (
+                      <option key={code} value={code}>
+                        {code}
+                      </option>
+                    ))}
 
-        {/* From / To */}
-        <section className="cc-section cc-row">
-          <div className="cc-field">
-            <label className="cc-label" htmlFor="from">
-              From
-            </label>
-            <div className="cc-select-wrapper">
-              <span className="cc-flag">🇺🇸</span>
-              <select id="from" className="cc-select">
-                <option value="USD">USD - United States Dollar</option>
-                <option value="EUR">EUR - Euro</option>
-                <option value="INR">INR - Indian Rupee</option>
-                <option value="GBP">GBP - British Pound</option>
-              </select>
+                  </select>
+                </div>
+              </div>
             </div>
-          </div>
-
-          <button className="cc-swap-btn" type="button">
-            ⇄
-          </button>
-
-          <div className="cc-field">
-            <label className="cc-label" htmlFor="to">
-              To
-            </label>
-            <div className="cc-select-wrapper">
-              <span className="cc-flag">🇮🇳</span>
-              <select id="to" className="cc-select">
-                <option value="INR">INR - Indian Rupee</option>
-                <option value="USD">USD - United States Dollar</option>
-                <option value="EUR">EUR - Euro</option>
-                <option value="GBP">GBP - British Pound</option>
-              </select>
+            <div className="relative w-full h-0.5">
+              <button
+                type="button"
+                className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 border-2 border-white rounded-md bg-blue-600 text-white px-2 py-0.5"
+                    onClick={swap}
+              >
+                swap
+              </button>
             </div>
-          </div>
-        </section>
+            <div className="w-full mt-1 mb-4">
+              <div className={`bg-white p-3 rounded-lg text-sm flex `}>
+                <div className="w-1/2">
+                  <label className="text-black/40 mb-2 inline-block">
+                    To
+                  </label>
+                  <input
+                    className="outline-none w-full bg-transparent py-1.5"
+                    type="number"
+                    placeholder="Amount"
+                    value={y}
+                    readOnly
+                  />
+                </div>
+                <div className="w-1/2 flex flex-wrap justify-end text-right">
+                  <p className="text-black/40 mb-2 w-full">Currency Type</p>
+                  <select
+                    className="rounded-lg px-1 py-1 bg-gray-100 cursor-pointer outline-none"
+                     value={to}
+                     defaultValue="INR"
+                    onChange={(e) => setto(e.target.value)}
+                  >
 
-        {/* Convert button */}
-        <section className="cc-section">
-          <button className="cc-convert-btn" type="button">
-            Convert
-          </button>
-        </section>
+                    {currencyKeys.map((code) => (
+                      <option key={code} value={code}>
+                        {code}
+                      </option>
+                    ))}
 
-        {/* Result box */}
-        <section className="cc-section">
-          <div className="cc-result">
-            <div className="cc-result-top">
-              <span className="cc-result-label">Converted Amount</span>
-              <span className="cc-result-rate">
-                1 USD = 83.25 INR
-              </span>
+                  </select>
+                </div>
+              </div>
             </div>
-            <div className="cc-result-value">--</div>
-          </div>
-        </section>
-
-        {/* Footer */}
-        <footer className="cc-footer">
-          <span className="cc-dot"></span>
-          <p>Design only • No API or logic implemented</p>
-        </footer>
+            <button type="submit" className="w-full bg-blue-600 text-white px-4 py-3 rounded-lg">
+              Convert
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );
-};
+}
 
-export default App;
+export default App
