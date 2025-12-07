@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import axios from 'axios';
 
 export const App = () => {
-  const [x, setx] = useState("")
+  const [x, setx] = useState("1")
   const [y, sety] = useState("")
   const [from, setfrom] = useState("USD")
   const [to, setto] = useState("INR")
@@ -19,33 +19,40 @@ export const App = () => {
     }
   };
 
-  const swap = ()=>{
+  const swap = () => {
     setfrom(to);
     setto(from);
+    setx("1")
   }
 
-const calc = (e) => {
-  e.preventDefault();
-  
-  const rate = data?.conversion_rates?.[to];
+  const calc = (e) => {
+    e.preventDefault();
 
-  if (!rate || !x) {
-    sety("");   // empty instead of NaN
-    return;
-  }
+    const rate = data?.conversion_rates?.[to];
 
-  const result = Number(x) * rate;
-  sety(result.toFixed(2)); // rounded + valid string
-};
+    if (!rate || !x) {
+      sety("");
+      return;
+    }
 
-
+    const result = Number(x) * rate;
+    sety(result.toFixed(2));
+  };
 
   const currencyKeys = data?.conversion_rates ? Object.keys(data.conversion_rates) : [];
-
 
   useEffect(() => {
     getData();
   }, [from]);
+
+  useEffect(() => {
+    if (data?.conversion_rates) {
+      const rate = data.conversion_rates[to];
+      if (rate && x) {
+        sety((Number(x) * rate).toFixed(2));
+      }
+    }
+  }, [data, x, to]);
 
 
   return (
@@ -59,7 +66,7 @@ const calc = (e) => {
       <div className="w-full">
         <div className="w-full max-w-md mx-auto border border-gray-60 rounded-lg p-5 backdrop-blur-sm bg-white/30">
           <form
-          onSubmit={calc}>
+            onSubmit={calc}>
             <div className="w-full mb-1">
               <div className={`bg-white p-3 rounded-lg text-sm flex `}>
                 <div className="w-1/2">
@@ -79,7 +86,11 @@ const calc = (e) => {
                   <p className="text-black/40 mb-2 w-full">Currency Type</p>
                   <select
                     className="rounded-lg px-1 py-1 bg-gray-100 cursor-pointer outline-none"
-                    onChange={(e) => setfrom(e.target.value)} value={from}
+                    onChange={(e) => {
+                      setfrom(e.target.value)
+                      setx("1");
+                    }
+                    } value={from}
                   >
                     {currencyKeys.map((code) => (
                       <option key={code} value={code}>
@@ -95,7 +106,7 @@ const calc = (e) => {
               <button
                 type="button"
                 className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 border-2 border-white rounded-md bg-blue-600 text-white px-2 py-0.5"
-                    onClick={swap}
+                onClick={swap}
               >
                 swap
               </button>
@@ -118,9 +129,11 @@ const calc = (e) => {
                   <p className="text-black/40 mb-2 w-full">Currency Type</p>
                   <select
                     className="rounded-lg px-1 py-1 bg-gray-100 cursor-pointer outline-none"
-                     value={to}
-                     defaultValue="INR"
-                    onChange={(e) => setto(e.target.value)}
+                    value={to}
+                    onChange={(e) => {
+                      setto(e.target.value)
+                      setx("1");
+                    }}
                   >
 
                     {currencyKeys.map((code) => (
