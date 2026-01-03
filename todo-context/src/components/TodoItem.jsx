@@ -1,6 +1,20 @@
-import React from 'react'
+import React, {useState} from 'react'
+import { UseTodo } from '../context/TodoContext';
+const TodoItem = ({todo}) => {
+    const {DeleteTodo, UpdateTodo, MarkTodo} = UseTodo()
 
-const TodoItem = () => {
+    const [todoMsg, setTodoMsg] = useState(todo.todo)
+    const [isTodoEditable, setIsTodoEditable] = useState(false)
+
+    const editTodo = ()=>{
+        UpdateTodo({...todo, todo: todoMsg}, todo.id)
+        setIsTodoEditable(false)
+    }
+
+    const toggleCompleted = ()=>{
+        MarkTodo(todo.id)
+    }
+
     return (
         <div
             className={`flex border border-black/10 rounded-lg px-3 py-1.5 gap-x-3 shadow-sm shadow-white/50 duration-300  text-black ${todo.completed ? "bg-[#c6e9a7]" : "bg-[#ccbed7]"
@@ -37,7 +51,7 @@ const TodoItem = () => {
             {/* Delete Todo Button */}
             <button
                 className="inline-flex w-8 h-8 rounded-lg text-sm border border-black/10 justify-center items-center bg-gray-50 hover:bg-gray-100 shrink-0"
-                onClick={() => deleteTodo(todo.id)}
+                onClick={() => DeleteTodo(todo.id)}
             >
                 ❌
             </button>
