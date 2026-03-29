@@ -25,7 +25,8 @@ export const App = () => {
     const swap = ()=>{
         setFrom(to)
         setTo(from)
-        setAmount(1)
+        setAmount(convert)
+        setConvert(amount)
     }
 
     return (

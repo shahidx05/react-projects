@@ -7,4 +7,5 @@ import App1 from './App1'
 
 createRoot(document.getElementById('root')).render(
   <App />
+  // <App1 />
 )
