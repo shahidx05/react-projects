@@ -7,7 +7,7 @@ const Navbar = () => {
     const [theme] = useContext(ThemeDataContext)
     return (
         <div className={theme}>
-            <h2>Sheryians</h2>
+            <h2>shahid</h2>
             <Nav2 />
         </div>
     )

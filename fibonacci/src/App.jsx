@@ -1,33 +1,33 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState, useMemo } from 'react'
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [x, setx] = useState(0);
+  const [num, setNum] = useState(null)
+
+  function Fibonacci(n){
+    if(n<=1) return n;
+    return Fibonacci(n-1) + Fibonacci(n-2)
+  }
+
+  const result = useMemo(() => Fibonacci(num), [num])
 
   return (
     <>
+      <h1>Counter App</h1>
+      <h2>Counter Value : {x}</h2>
+      <button onClick={() => { setx(x + 1) }}>inc</button>
+      <button onClick={() => {
+        if (x > 0) setx(x - 1)
+      }} >dec</button>
+
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <h2>Fibonacci number is : {result}</h2>
+        <input type='number' 
+        value={num}
+        onChange={(e)=>setNum(e.target.value)}
+        />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
 }

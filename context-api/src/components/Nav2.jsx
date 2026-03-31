@@ -3,8 +3,8 @@ import { ThemeDataContext } from "../context/ThemeContext"
 
 const Nav2 = () => {
 
-    const [theme,setTheme] = useContext(ThemeDataContext)
-    
+    const [theme, setTheme] = useContext(ThemeDataContext)
+
     return (
         <div className='nav2'>
             <h4>Home</h4>

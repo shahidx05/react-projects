@@ -7,7 +7,8 @@ const Button = () => {
     const [theme, setTheme] = useContext(ThemeDataContext)
 
     const changeTheme = () => {
-        setTheme('dark')
+        if (theme === 'light') setTheme('dark')
+        else setTheme('light')
     }
     return (
         <div >
