@@ -1,20 +1,33 @@
-import React, {useState} from 'react'
+import React, { useState, useRef } from 'react'
 
 const App = () => {
   const [time, setTime] = useState(0)
+  const intervalRef = useRef(null)
 
-  const start = ()=>{
-    setInterval(()=>{
-      setTime((prev)=>prev+1)
-    },1000)
+  const start = () => {
+    if (intervalRef.current !== null) return
+
+    intervalRef.current = setInterval(() => {
+      setTime((prev) => prev + 1)
+    }, 1000)
+  }
+
+  const stop = () => {
+    clearInterval(intervalRef.current)
+    intervalRef.current = null
+  }
+  const reset = () => {
+    clearInterval(intervalRef.current)
+    intervalRef.current = null
+    setTime(0)
   }
 
   return (
     <>
-    <h2>Stopwatch is : {time}</h2>
-    <button onClick={start} >Start</button>
-    <button>Stop</button>
-    <button>Reset</button>
+      <h2>Stopwatch is : {time}</h2>
+      <button onClick={start} >Start</button>
+      <button onClick={stop} >Stop</button>
+      <button onClick={reset} >Reset</button>
     </>
   )
 }
