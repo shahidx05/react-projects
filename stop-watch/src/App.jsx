@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-
+import './App.css'
 const App = () => {
   const [time, setTime] = useState(0)
   const intervalRef = useRef(null)
@@ -17,18 +17,28 @@ const App = () => {
     intervalRef.current = null
   }
   const reset = () => {
-    clearInterval(intervalRef.current)
-    intervalRef.current = null
+    // clearInterval(intervalRef.current)
+    // intervalRef.current = null
+    stop()
     setTime(0)
   }
 
+  const formatTime = (time) => {
+    const minutes = Math.floor(time / 60)
+    const seconds = time % 60
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
+  }
+
   return (
-    <>
-      <h2>Stopwatch is : {time}</h2>
-      <button onClick={start} >Start</button>
-      <button onClick={stop} >Stop</button>
-      <button onClick={reset} >Reset</button>
-    </>
+    <div className="container">
+      <h2 className="time">⏱ {formatTime(time)}</h2>
+
+      <div className="buttons">
+        <button className="start" onClick={start}>Start</button>
+        <button className="stop" onClick={stop}>Stop</button>
+        <button className="reset" onClick={reset}>Reset</button>
+      </div>
+    </div>
   )
 }
 
