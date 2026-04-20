@@ -1,79 +1,62 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect} from "react";
 import MediaCard from "./MediaCard";
-import { useSelector } from "react-redux";
-import { fetchGif, fetchPhotos, fetchVideos } from "../api/api";
+import { useSelector, useDispatch } from "react-redux";
+import { getPhotos, getGIFs, getVideos } from "../redux/features/searchSlice";
 
 const MediaGrid = () => {
-    const q = useSelector(state => state.search.query)
-    const tab = useSelector(state => state.search.tab)
+    const dispatch = useDispatch();
 
-    const [Photos, setPhotos] = useState([])
-    const [videos, setVideos] = useState([])
-    const [GIFs, setGIFS] = useState([])
-    const [media, setMedia] = useState([])
+    const { query, tab, results, loading, error } = useSelector(state => state.search)
 
-
-    const fetchData = async () => {
-        try {
-            const res1 = await fetchPhotos(q);
-            setPhotos(res1.results);
-            console.log("Photos:", res1);
-            const res2 = await fetchVideos(q);
-            setVideos(res2.videos);
-            console.log("Videos:", res2);
-            const res3 = await fetchGif(q);
-            setGIFS(res3.results);
-            console.log("GIFs:", res3);
-        } catch (error) {
-            console.error("Error fetching photos:", error);
-        }
-    };
-
-    const filterMedia = () => {
+    const transformedData = results.map(item => {
         if (tab === "photos") {
-            setMedia(Photos.map(photo => ({
-                id: photo.id,
-                type: 'photo',
-                title: photo.alt_description,
-                thumbnail: photo.urls.small,
-                src: photo.urls.full,
-                url: photo.links.html
-            })));
-
-        } else if (tab === "gifs") {
-            setMedia(GIFs.map(gif => ({
-                id: gif.id,
-                title: gif.title || 'GIF',
-                type: 'gif',
-                thumbnail: gif.media_formats.tinygif.url,
-                src: gif.media_formats.gif.url,
-                url: gif.url
-            })));
-        } else if (tab === "videos") {
-            setMedia(videos.map(video => ({
-                id: video.id,
-                type: 'video',
-                title: video.user.name || 'video',
-                thumbnail: video.image,
-                src: video.video_files[0].link,
-                url: video.url
-            })));
+            return {
+                id: item.id,
+                type: "image",
+                src: item.urls.small,
+                title: item.alt_description,
+                url: item.links.html
+            };
         }
-    };
+
+        if (tab === "gifs") {
+            return {
+                id: item.id,
+                type: "gif",
+                src: item.media_formats.gif.url,
+                title: item.title || "GIF",
+                url: item.url
+            };
+        }
+
+        if (tab === "videos") {
+            return {
+                id: item.id,
+                type: "video",
+                src: item.video_files[0]?.link,
+                title: item.user?.name || "Video",
+                url: item.url
+            };
+        }
+    });
 
     useEffect(() => {
-        filterMedia();
-    }, [tab, Photos, videos, GIFs])
+        if (!query.trim()) return;
 
-    useEffect(() => {
-        if (q.trim()) {
-            fetchData();
-        }
-    }, [q])
+        if (tab === "photos") dispatch(getPhotos(query));
+        else if (tab === "videos") dispatch(getVideos(query));
+        else if (tab === "gifs") dispatch(getGIFs(query));
 
+    }, [query, tab]);
+
+    if (loading) return <p className="text-white">Loading...</p>;
+    if (error) return <p className="text-red-500">{error}</p>;
+    if (!query.trim()) {
+        return <p className="text-gray-400">Search something...</p>;
+    }
     return (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {media.map((item) => (
+            {transformedData.map((item) => (
                 <MediaCard key={item.id} item={item} />
             ))}
         </div>

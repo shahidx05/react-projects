@@ -1,6 +1,14 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+import { addItem } from "../redux/features/saveSlice";
 
 const MediaCard = ({ item }) => {
+    const dispatch = useDispatch();
+
+    const handleSave = () => {
+        dispatch(addItem(item));
+    };
+
     return (
         <div className="bg-gray-900 rounded-xl overflow-hidden shadow-md">
 
@@ -26,7 +34,7 @@ const MediaCard = ({ item }) => {
 
             {/* Save Button */}
             <div className="p-2 flex justify-end">
-                <button className="bg-blue-600 px-3 py-1 text-sm rounded-md hover:bg-blue-500">
+                <button className="bg-blue-600 px-3 py-1 text-sm rounded-md hover:bg-blue-500" onClick={handleSave}>
                     Save
                 </button>
             </div>
