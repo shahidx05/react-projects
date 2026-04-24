@@ -47,7 +47,7 @@ const searchSlice = createSlice({
         error: null,
     },
     reducers: {
-        setSearchQuery: (state, action) => {
+        setQuery: (state, action) => {
             state.query = action.payload;
         },
         setTab: (state, action) => {
@@ -64,6 +64,8 @@ const searchSlice = createSlice({
             // Photos
             .addCase(getPhotos.pending, (state) => {
                 state.loading = true;
+                state.results = [];
+                state.loading = false;
             })
             .addCase(getPhotos.fulfilled, (state, action) => {
                 state.loading = false;
@@ -77,6 +79,7 @@ const searchSlice = createSlice({
             // Videos
             .addCase(getVideos.fulfilled, (state, action) => {
                 state.results = action.payload;
+                state.results = [];
                 state.loading = false;
             })
 
@@ -92,6 +95,7 @@ const searchSlice = createSlice({
             .addCase(getGIFs.fulfilled, (state, action) => {
                 state.results = action.payload;
                 state.loading = false;
+                state.loading = false;
             })
             .addCase(getGIFs.pending, (state) => {
                 state.loading = true;
@@ -103,5 +107,5 @@ const searchSlice = createSlice({
     }
 });
 
-export const { setSearchQuery, setTab, clearResults } = searchSlice.actions;
+export const { setQuery, setTab, clearResults } = searchSlice.actions;
 export default searchSlice.reducer;

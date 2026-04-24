@@ -1,9 +1,12 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addItem } from "../redux/features/saveSlice";
 
 const MediaCard = ({ item }) => {
     const dispatch = useDispatch();
+
+    const { items } = useSelector(state => state.save);
+    const isSaved = items.some(i => i.id === item.id);
 
     const handleSave = () => {
         dispatch(addItem(item));
@@ -34,8 +37,9 @@ const MediaCard = ({ item }) => {
 
             {/* Save Button */}
             <div className="p-2 flex justify-end">
-                <button className="bg-blue-600 px-3 py-1 text-sm rounded-md hover:bg-blue-500" onClick={handleSave}>
-                    Save
+                <button onClick={handleSave} disabled={isSaved}
+                    className={isSaved ? "bg-gray-600 px-3 py-1 text-sm rounded-md hover:bg-blue-500" : "bg-blue-600 px-3 py-1 text-sm rounded-md hover:bg-gray-500"}>
+                    {isSaved ? "Saved ✓" : "Save"}
                 </button>
             </div>
         </div>

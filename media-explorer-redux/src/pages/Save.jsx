@@ -6,7 +6,6 @@ import { clearItems } from "../redux/features/saveSlice";
 const Save = () => {
   const dispatch = useDispatch();
   const { items } = useSelector(state => state.save);
-  console.log(items);
 
   const handleClearAll = () => {
     dispatch(clearItems());

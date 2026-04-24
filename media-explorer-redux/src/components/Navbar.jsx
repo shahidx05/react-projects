@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Search, X } from "lucide-react";
 import { NavLink } from "react-router-dom";
-import { useDispatch, useSelector } from 'react-redux'
-import { setSearchQuery } from "../redux/features/searchSlice.js";
+import { useDispatch } from 'react-redux'
+import { setQuery } from "../redux/features/searchSlice.js";
 
 const Navbar = () => {
     const [showSearch, setShowSearch] = useState(false);
@@ -12,7 +12,7 @@ const Navbar = () => {
 
     const searchHandler = () => {
         if (!q.trim()) return;
-        dispatch(setSearchQuery(q));
+        dispatch(setQuery(q));
     };
 
     return (
@@ -73,7 +73,7 @@ const Navbar = () => {
                             onChange={(e) => setQ(e.target.value)}
                         />
                         <button className="bg-blue-600 px-4 py-2 rounded-lg text-sm hover:bg-blue-500"
-                            onClick={searchHandler}
+                            onClick={(e) => e.key === 'Enter' && searchHandler()}
                         >
                             Go
                         </button>
