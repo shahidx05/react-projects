@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addItem } from "../redux/features/saveSlice";
+import { addItem, addedToast } from "../redux/features/saveSlice";
 
 const MediaCard = ({ item }) => {
     const dispatch = useDispatch();
@@ -10,6 +10,7 @@ const MediaCard = ({ item }) => {
 
     const handleSave = () => {
         dispatch(addItem(item));
+        dispatch(addedToast());
     };
 
     return (
@@ -31,6 +32,7 @@ const MediaCard = ({ item }) => {
                         src={item.src}
                         controls
                         className="w-full h-full object-cover"
+                        autoPlay loop muted
                     />
                 )}
             </div>

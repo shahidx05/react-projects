@@ -1,12 +1,13 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import {  removeItem  } from "../redux/features/saveSlice";
+import {  removeItem, removeToast } from "../redux/features/saveSlice";
 
 const SavedCard = ({ item }) => {
   const dispatch = useDispatch();
 
   const handleRemove = () => {
     dispatch(removeItem(item.id));
+    dispatch(removeToast());
   };
 
   return (
@@ -14,7 +15,7 @@ const SavedCard = ({ item }) => {
       
       {/* Media */}
       <div className="w-full h-48 bg-black">
-        {(item.type === "image" || item.type === "gif") && (
+        {(item.type === "photo" || item.type === "gif") && (
           <img
             src={item.src}
             alt=""
@@ -27,6 +28,7 @@ const SavedCard = ({ item }) => {
             src={item.src}
             controls
             className="w-full h-full object-cover"
+            autoPlay loop muted 
           />
         )}
       </div>
