@@ -5,14 +5,18 @@ import { getPhotos, getGIFs, getVideos } from "../redux/features/searchSlice";
 
 const MediaGrid = () => {
     const dispatch = useDispatch();
-    const { query, tab, results, loading, error } = useSelector(state => state.search);
+    // const { query, tab, results, loading, error } = useSelector(state => state.search);
+
+    const { query, tab, cache, loading, error } = useSelector(state => state.search);
+    const results = cache[tab];
 
     useEffect(() => {
         if (!query.trim()) return;
+        if (results.length > 0) return;
 
-        if (tab === "photos") dispatch(getPhotos(query));
-        else if (tab === "videos") dispatch(getVideos(query));
-        else if (tab === "gifs") dispatch(getGIFs(query));
+        if (tab === "photos") dispatch(getPhotos({ query, tab }));
+        else if (tab === "videos") dispatch(getVideos({ query, tab }));
+        else if (tab === "gifs") dispatch(getGIFs({ query, tab }));
 
     }, [query, tab, dispatch]);
 

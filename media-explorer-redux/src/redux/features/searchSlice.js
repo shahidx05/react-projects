@@ -3,15 +3,15 @@ import { fetchPhotos, fetchVideos, fetchGif } from "../../api/api";
 
 export const getPhotos = createAsyncThunk(
     "media/getPhotos",
-    async (query, thunkAPI) => {
+    async ({ query, tab }, thunkAPI) => {
         try {
             const res = await fetchPhotos(query);
-            return res.results.map(item => ({
+            return res.results.map((item) => ({
                 id: item.id,
                 type: "photo",
                 src: item.urls.small,
                 title: item.alt_description || "Photo",
-                url: item.links.html
+                url: item.links.html,
             }));
         } catch (err) {
             return thunkAPI.rejectWithValue(err.message);
@@ -21,7 +21,7 @@ export const getPhotos = createAsyncThunk(
 
 export const getVideos = createAsyncThunk(
     "media/getVideos",
-    async (query, thunkAPI) => {
+    async ({ query, tab }, thunkAPI) => {
         try {
             const res = await fetchVideos(query);
             return res.videos.map(item => ({
@@ -39,7 +39,7 @@ export const getVideos = createAsyncThunk(
 
 export const getGIFs = createAsyncThunk(
     "media/getGIFs",
-    async (query, thunkAPI) => {
+    async ({ query, tab }, thunkAPI) => {
         try {
             const res = await fetchGif(query);
             return res.results.map(item => ({
@@ -60,33 +60,42 @@ const searchSlice = createSlice({
     initialState: {
         query: "",
         tab: "photos",
-        results: [],
+        // results: [],   // old
+        cache: {
+            photos: [],
+            videos: [],
+            gifs: [],
+        },
         loading: false,
         error: null,
     },
     reducers: {
         setQuery: (state, action) => {
             state.query = action.payload;
+            state.cache = { photos: [], videos: [], gifs: [] };
+            state.error = null;
         },
         setTab: (state, action) => {
             state.tab = action.payload;
-            state.results = [];
             state.error = null;
+            // state.results = [];    // in new not clear results here, we rely on cache and loading state to control what is shown in UI
         },
         clearResults: (state) => {
-            state.results = [];
+            // state.results = [];
+            state.cache = { photos: [], videos: [], gifs: [] };
             state.error = null;
         }
     },
     extraReducers: (builder) => {
         const pendingCase = (state) => {
             state.loading = true;
-            state.results = [];   // ← clear stale data immediately
+            // state.results = [];   // ← clear stale data immediately
             state.error = null;
         };
         const fulfilledCase = (state, action) => {
             state.loading = false;
-            state.results = action.payload; // ← already normalized, safe to render
+            // state.results = action.payload; // ← already normalized, safe to render
+            state.cache[action.meta.arg.tab] = action.payload;
         };
         const rejectedCase = (state, action) => {
             state.loading = false;

@@ -10,9 +10,12 @@ const Navbar = () => {
 
     const dispatch = useDispatch();
 
-    const searchHandler = () => {
+    const searchHandler = (e) => {
+        e.preventDefault();              
         if (!q.trim()) return;
-        dispatch(setQuery(q));
+        dispatch(setQuery(q.trim()));
+        setQ("");                        
+        setShowSearch(false);           
     };
 
     return (
@@ -23,8 +26,8 @@ const Navbar = () => {
                     {/* Logo */}
                     <div className="text-xl font-bold">Media Explorer</div>
 
-                    {/* Desktop Search */}
-                    <div className="hidden md:flex items-center bg-gray-800 px-3 py-2 rounded-lg w-1/3">
+                    {/* Desktop Search — wrapped in form */}
+                    <form onSubmit={searchHandler} className="hidden md:flex items-center bg-gray-800 px-3 py-2 rounded-lg w-1/3">
                         <input
                             type="text"
                             placeholder="Search media..."
@@ -32,18 +35,17 @@ const Navbar = () => {
                             value={q}
                             onChange={(e) => setQ(e.target.value)}
                         />
-                        <button className="ml-2 bg-blue-600 px-3 py-1 rounded-md text-sm hover:bg-blue-500"
-                            onClick={searchHandler}
-                        >
+                        <button type="submit" className="ml-2 bg-blue-600 px-3 py-1 rounded-md text-sm hover:bg-blue-500">
                             Search
                         </button>
-                    </div>
+                    </form>
 
                     {/* Right Side */}
                     <div className="flex items-center gap-4">
 
                         {/* Mobile Toggle Button */}
                         <button
+                            type="button"
                             onClick={() => setShowSearch(!showSearch)}
                             className="md:hidden bg-gray-800 p-2 rounded-md"
                         >
@@ -61,23 +63,22 @@ const Navbar = () => {
                 </div>
             </nav>
 
-            {/* Mobile Search Bar */}
+            {/* Mobile Search Bar — wrapped in form */}
             {showSearch && (
                 <div className="md:hidden px-4 py-2 bg-gray-900">
-                    <div className="flex gap-2">
+                    <form onSubmit={searchHandler} className="flex gap-2">
                         <input
                             type="text"
                             placeholder="Search media..."
                             className="flex-1 bg-gray-800 text-white px-3 py-2 rounded-lg outline-none placeholder-gray-400"
                             value={q}
                             onChange={(e) => setQ(e.target.value)}
+                            autoFocus
                         />
-                        <button className="bg-blue-600 px-4 py-2 rounded-lg text-sm hover:bg-blue-500"
-                            onClick={(e) => e.key === 'Enter' && searchHandler()}
-                        >
+                        <button type="submit" className="bg-blue-600 px-4 py-2 rounded-lg text-sm hover:bg-blue-500">
                             Go
                         </button>
-                    </div>
+                    </form>
                 </div>
             )}
         </>
